@@ -1,9 +1,8 @@
-import { FiSearch, FiMapPin, FiCalendar } from 'react-icons/fi';
+import { FiSearch, FiCalendar } from 'react-icons/fi';
 import Swal from 'sweetalert2';
 
 const fields = [
   { icon: FiSearch, label: 'Buscar', value: 'Festivales, conciertos...' },
-  { icon: FiMapPin, label: 'Dónde', value: 'Centro Histórico' },
   { icon: FiCalendar, label: 'Cuándo', value: 'Este fin de semana' },
 ];
 

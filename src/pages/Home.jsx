@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
+import { CircleMarker, MapContainer, Popup, TileLayer } from 'react-leaflet';
 import Navbar from '../components/Navbar.jsx';
 import Hero from '../components/Hero.jsx';
-import CategoryChips from '../components/CategoryChips.jsx';
 import FeaturedEventCard from '../components/FeaturedEventCard.jsx';
 import EventCard from '../components/EventCard.jsx';
-import PlaceCard from '../components/PlaceCard.jsx';
 import Footer from '../components/Footer.jsx';
-import { CATEGORIES } from '../constants/homeData.js';
 import { getFeaturedEvents, getUpcomingEvents, getPopularPlaces } from '../services/eventService.js';
 
 export default function Home() {
@@ -24,18 +22,17 @@ export default function Home() {
     <div className="max-w-[1440px] mx-auto bg-surface shadow-lg overflow-hidden">
       <Navbar />
       <Hero />
-      <CategoryChips categories={CATEGORIES} onChange={(id) => console.log('categoría seleccionada:', id)} />
 
       <section className="px-6 sm:px-10 py-8 sm:py-11">
         <div className="flex items-baseline justify-between mb-5">
           <div>
-            <h2 className="text-xl sm:text-2xl font-display">Eventos destacados</h2>
-            <p className="text-[13.5px] text-muted mt-1">Los más populares de la semana</p>
+            <h2 className="text-xl sm:text-2xl font-display">Próximos eventos</h2>
+            <p className="text-[13.5px] text-muted mt-1">Eventos cercanos a la fecha actual</p>
           </div>
           <a href="#" className="text-[13.5px] font-semibold text-brand">Ver todos →</a>
         </div>
         <div className="flex flex-col sm:flex-row gap-5">
-          {featuredEvents.map((event) => (
+          {featuredEvents.slice(0, 2).map((event) => (
             <FeaturedEventCard key={event.id} event={event} />
           ))}
         </div>
@@ -44,13 +41,13 @@ export default function Home() {
       <section className="bg-bg px-6 sm:px-10 py-8 sm:py-11">
         <div className="flex items-baseline justify-between mb-5">
           <div>
-            <h2 className="text-xl sm:text-2xl font-display">Próximos eventos</h2>
-            <p className="text-[13.5px] text-muted mt-1">Basados en tu ubicación</p>
+            <h2 className="text-xl sm:text-2xl font-display">Más eventos</h2>
+            <p className="text-[13.5px] text-muted mt-1">Aún tienes opciones para esta semana</p>
           </div>
           <a href="#" className="text-[13.5px] font-semibold text-brand">Ver todos →</a>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {upcomingEvents.map((event) => (
+          {upcomingEvents.slice(0, 4).map((event) => (
             <EventCard key={event.id} event={event} />
           ))}
         </div>
@@ -58,13 +55,33 @@ export default function Home() {
 
       <section className="px-6 sm:px-10 py-8 sm:py-11">
         <div className="mb-5">
-          <h2 className="text-xl sm:text-2xl font-display">Lugares populares</h2>
-          <p className="text-[13.5px] text-muted mt-1">Dónde suceden los mejores eventos</p>
+          <h2 className="text-xl sm:text-2xl font-display">Mapa de eventos</h2>
+          <p className="text-[13.5px] text-muted mt-1">Zonas con mayor actividad en Cartagena</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-          {places.map((place) => (
-            <PlaceCard key={place.id} place={place} />
-          ))}
+
+        <div className="overflow-hidden rounded-2xl border border-borderc shadow-sm h-[360px]">
+          <MapContainer center={[10.3928, -75.4833]} zoom={12} scrollWheelZoom className="h-full w-full">
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+
+            {places.map((place) => (
+              <CircleMarker
+                key={place.id}
+                center={[place.lat, place.lng]}
+                radius={10}
+                pathOptions={{ color: '#007BFF', fillColor: '#007BFF', fillOpacity: 0.8 }}
+              >
+                <Popup>
+                  <div className="space-y-1">
+                    <p className="font-semibold text-ink">{place.name}</p>
+                    <p className="text-sm text-muted">{place.activeEvents} eventos activos</p>
+                  </div>
+                </Popup>
+              </CircleMarker>
+            ))}
+          </MapContainer>
         </div>
       </section>
 
