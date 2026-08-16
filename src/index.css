@@ -5,3 +5,130 @@
 body {
   -webkit-font-smoothing: antialiased;
 }
+
+.leaflet-container {
+  background: #1f242a;
+}
+
+.leaflet-map-dark .leaflet-control-zoom {
+  border: none;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.28);
+}
+
+.leaflet-map-dark .leaflet-control-zoom a {
+  background: rgba(31, 41, 55, 0.94);
+  color: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+}
+
+.leaflet-popup-content {
+  margin: 12px 14px;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: #0f172a;
+}
+
+.custom-map-pin-wrapper {
+  background: transparent;
+  border: none;
+}
+
+.custom-map-pin {
+  position: relative;
+  width: 18px;
+  height: 22px;
+  background: #2563eb;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  box-shadow: 0 6px 12px rgba(37, 99, 235, 0.28);
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+}
+
+.custom-map-pin::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.custom-map-pin__dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.map-popup-card {
+  width: 230px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #0f172a;
+}
+
+.map-popup-card__badge {
+  align-self: flex-start;
+  border-radius: 9999px;
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: 5px 8px;
+  text-transform: uppercase;
+}
+
+.map-popup-card__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #0f172a;
+}
+
+.map-popup-card__description {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: #475569;
+}
+
+.map-popup-card__meta {
+  display: flex;
+  align-items: center;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.map-popup-card__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border-radius: 10px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 10px 12px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.map-popup-card__button:hover {
+  background: #1d4ed8;
+}

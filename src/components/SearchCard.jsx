@@ -17,7 +17,7 @@ export default function SearchCard() {
   };
 
   return (
-    <div className="relative z-[5] bg-white rounded-2xl shadow-lg p-2.5 flex flex-col sm:flex-row gap-1.5 mt-2 max-w-[920px]">
+    <div className="relative z-[5] w-full bg-white rounded-2xl shadow-lg p-2.5 flex flex-col sm:flex-row gap-1.5 mt-2 mx-auto">
       {fields.map(({ icon: Icon, label, value }, i) => (
         <div
           key={label}
