@@ -1,19 +1,9 @@
+import { Link } from 'react-router-dom';
 import { FiCalendar, FiMapPin } from 'react-icons/fi';
-import Swal from 'sweetalert2';
 import { formatPrice } from '../utils/formatters.js';
 
 export default function FeaturedEventCard({ event }) {
-  const { category, title, date, location, price, gradient, photo } = event;
-
-  const handleViewDetails = () => {
-    Swal.fire({
-      title,
-      text: `${date} · ${location}`,
-      icon: 'info',
-      confirmButtonColor: '#007BFF',
-      confirmButtonText: 'Entendido',
-    });
-  };
+  const { id, category, title, date, location, price, gradient, photo } = event;
 
   return (
     <article className="flex flex-col sm:flex-row flex-1 bg-white border border-slate-200 rounded-card overflow-hidden shadow-sm">
@@ -38,12 +28,12 @@ export default function FeaturedEventCard({ event }) {
 
         <div className="mt-auto flex items-center justify-between">
           <span className="font-bold text-sm text-slate-900">Desde {formatPrice(price)}</span>
-          <button
-            onClick={handleViewDetails}
+          <Link
+            to={`/eventos/${id}`}
             className="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-[#2563eb] shadow-[0_4px_12px_-4px_rgba(37,99,235,.55)] hover:bg-[#1d4ed8] transition-colors"
           >
             Ver detalles
-          </button>
+          </Link>
         </div>
       </div>
     </article>

@@ -2,7 +2,7 @@ import SearchCard from './SearchCard.jsx';
 
 export default function Hero() {
   return (
-    <section className="relative px-6 sm:px-10 pt-12 sm:pt-16 pb-20 sm:pb-24 text-white overflow-hidden bg-[radial-gradient(120%_140%_at_15%_-10%,#2b9dff_0%,#007BFF_45%,#0047a8_100%)]">
+    <section className="relative px-6 sm:px-10 pt-16 sm:pt-24 pb-28 sm:pb-36 text-white overflow-hidden bg-[radial-gradient(120%_140%_at_15%_-10%,#2b9dff_0%,#007BFF_45%,#0047a8_100%)]">
       <div className="mx-auto max-w-5xl flex flex-col items-center text-center">
         <h1 className="font-display text-3xl sm:text-[44px] leading-[1.08] max-w-xl mb-3.5">
           Vive Cartagena,

@@ -1,17 +1,20 @@
-import demoEvents from '../data/eventosDemo.json';
-import { FEATURED_EVENTS, UPCOMING_EVENTS, POPULAR_PLACES } from '../constants/homeData.js';
+import { httpClient } from './httpClient.js';
 
 const formatDisplayDate = (dateString, timeString) => {
-  const date = new Date(`${dateString}T${timeString}`);
+  if (!dateString) return '';
 
+  const date = new Date(timeString ? `${dateString}T${timeString}` : dateString);
   if (Number.isNaN(date.getTime())) return dateString;
 
   const weekday = date.toLocaleDateString('es-ES', { weekday: 'short' }).replace('.', '');
   const day = date.getDate();
   const month = date.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '');
-  const hour = date.toLocaleTimeString('es-ES', { hour: 'numeric', minute: '2-digit', hour12: true });
+  const capitalizedWeekday = `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)}`;
 
-  return `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)} ${day} ${month} · ${hour}`;
+  if (!timeString) return `${capitalizedWeekday} ${day} ${month}`;
+
+  const hour = date.toLocaleTimeString('es-ES', { hour: 'numeric', minute: '2-digit', hour12: true });
+  return `${capitalizedWeekday} ${day} ${month} · ${hour}`;
 };
 
 const normalizeEvent = (event) => ({
@@ -20,9 +23,9 @@ const normalizeEvent = (event) => ({
   title: event.titulo,
   description: event.descripcion,
   category: event.categoria?.nombre || 'Evento',
-  location: event.lugar,
+  location: event.lugar || '',
   date: formatDisplayDate(event.fecha, event.hora),
-  startsAt: `${event.fecha}T${event.hora}`,
+  startsAt: event.fecha ? `${event.fecha}T${event.hora || '00:00:00'}` : null,
   lat: event.latitud,
   lng: event.longitud,
   price: event.localidades?.[0]?.precio ?? 0,
@@ -37,35 +40,45 @@ const sortByNearestDate = (events) => {
   const now = Date.now();
 
   return [...events].sort((a, b) => {
-    const aTime = new Date(a.startsAt || a.date).getTime();
-    const bTime = new Date(b.startsAt || b.date).getTime();
+    const aTime = a.startsAt ? new Date(a.startsAt).getTime() : Number.POSITIVE_INFINITY;
+    const bTime = b.startsAt ? new Date(b.startsAt).getTime() : Number.POSITIVE_INFINITY;
 
-    const diffA = Math.abs(aTime - now);
-    const diffB = Math.abs(bTime - now);
-
-    return diffA - diffB;
+    return Math.abs(aTime - now) - Math.abs(bTime - now);
   });
 };
 
+/** Eventos destacados: los 2 más próximos a la fecha actual (GET /eventos). */
 export async function getFeaturedEvents() {
-  const normalized = demoEvents.map(normalizeEvent);
-  return Promise.resolve(sortByNearestDate(normalized).slice(0, 2));
+  const data = await httpClient.get('/eventos', { page: 0, size: 8, sort: 'fecha,asc' });
+  const events = (data?.content || []).map(normalizeEvent);
+  return sortByNearestDate(events).slice(0, 2);
 }
 
+/** Más eventos para la sección "Más eventos" (GET /eventos). */
 export async function getUpcomingEvents() {
-  const normalized = demoEvents.map(normalizeEvent);
-  return Promise.resolve(sortByNearestDate(normalized).slice(0, 4));
+  const data = await httpClient.get('/eventos', { page: 0, size: 12, sort: 'fecha,asc' });
+  const events = (data?.content || []).map(normalizeEvent);
+  return sortByNearestDate(events).slice(0, 4);
 }
 
-export async function getMapEvents() {
-  return Promise.resolve(demoEvents.map(normalizeEvent));
+/** Eventos para el mapa, con filtro opcional por categoría/ubicación (GET /eventos/mapa). */
+export async function getMapEvents({ categoriaId, lat, lng, radioKm } = {}) {
+  const data = await httpClient.get('/eventos/mapa', { categoriaId, lat, lng, radioKm });
+  return (data || []).map(normalizeEvent);
 }
 
+/** Detalle de un evento (GET /eventos/{id}). */
 export async function getEventById(eventId) {
-  const event = demoEvents.find((item) => String(item.id) === String(eventId));
-  return Promise.resolve(event ? normalizeEvent(event) : null);
+  const data = await httpClient.get(`/eventos/${eventId}`);
+  return data ? normalizeEvent(data) : null;
 }
 
-export async function getPopularPlaces() {
-  return Promise.resolve(POPULAR_PLACES);
+/** Búsqueda de eventos por título o fecha (GET /eventos/buscar). */
+export async function searchEvents({ titulo, fecha, page = 0, size = 12 } = {}) {
+  const data = await httpClient.get('/eventos/buscar', { titulo, fecha, page, size });
+
+  return {
+    events: (data?.content || []).map(normalizeEvent),
+    total: data?.totalElements ?? 0,
+  };
 }

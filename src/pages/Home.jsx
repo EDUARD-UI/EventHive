@@ -7,15 +7,10 @@ import Hero from '../components/Hero.jsx';
 import FeaturedEventCard from '../components/FeaturedEventCard.jsx';
 import EventCard from '../components/EventCard.jsx';
 import Footer from '../components/Footer.jsx';
+import { DISTANCE_OPTIONS } from '../constants/homeData.js';
 import { getFeaturedEvents, getMapEvents, getUpcomingEvents } from '../services/eventService.js';
 
 const CARTAGENA_CENTER = { lat: 10.3951, lng: -75.4834 };
-const DISTANCE_OPTIONS = [
-  { value: 'all', label: 'Todas las distancias' },
-  { value: '5', label: 'Hasta 5 km' },
-  { value: '10', label: 'Hasta 10 km' },
-  { value: '15', label: 'Hasta 15 km' },
-];
 
 const toRad = (value) => (value * Math.PI) / 180;
 
@@ -52,15 +47,36 @@ export default function Home() {
   const [mapEvents, setMapEvents] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDistance, setSelectedDistance] = useState('all');
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
-    getFeaturedEvents().then(setFeaturedEvents);
-    getUpcomingEvents().then(setUpcomingEvents);
-    getMapEvents().then(setMapEvents);
+    let isMounted = true;
+    setLoading(true);
+    setLoadError(null);
+
+    Promise.all([getFeaturedEvents(), getUpcomingEvents(), getMapEvents()])
+      .then(([featured, upcoming, map]) => {
+        if (!isMounted) return;
+        setFeaturedEvents(featured);
+        setUpcomingEvents(upcoming);
+        setMapEvents(map);
+      })
+      .catch((error) => {
+        if (!isMounted) return;
+        setLoadError(error.message);
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const categories = useMemo(
-    () => (['all', ...new Set(mapEvents.map((event) => event.category))]),
+    () => ['all', ...new Set(mapEvents.map((event) => event.category))],
     [mapEvents],
   );
 
@@ -87,16 +103,27 @@ export default function Home() {
       <Navbar />
       <Hero />
 
+      {loadError && (
+        <div className="mx-4 mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[13.5px] text-red-700 sm:mx-6 lg:mx-8">
+          No se pudieron cargar los eventos. Verifica que el backend esté disponible ({loadError}).
+        </div>
+      )}
+
       <section className="w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 bg-white">
         <div className="flex items-baseline justify-between mb-5">
           <div>
             <h2 className="text-xl sm:text-2xl font-display">Próximos eventos</h2>
             <p className="text-[13.5px] text-muted mt-1">Eventos cercanos a la fecha actual</p>
           </div>
-          <a href="#" className="text-[13.5px] font-semibold text-brand">Ver todos →</a>
+          <Link to="/buscar" className="text-[13.5px] font-semibold text-brand">Ver todos →</Link>
         </div>
+
+        {!loading && featuredEvents.length === 0 && !loadError && (
+          <p className="text-[13.5px] text-muted">Aún no hay eventos publicados.</p>
+        )}
+
         <div className="flex flex-col sm:flex-row gap-5">
-          {featuredEvents.slice(0, 2).map((event) => (
+          {featuredEvents.map((event) => (
             <FeaturedEventCard key={event.id} event={event} />
           ))}
         </div>
@@ -108,10 +135,15 @@ export default function Home() {
             <h2 className="text-xl sm:text-2xl font-display">Más eventos</h2>
             <p className="text-[13.5px] text-muted mt-1">Aún tienes opciones para esta semana</p>
           </div>
-          <a href="#" className="text-[13.5px] font-semibold text-brand">Ver todos →</a>
+          <Link to="/buscar" className="text-[13.5px] font-semibold text-brand">Ver todos →</Link>
         </div>
+
+        {!loading && upcomingEvents.length === 0 && !loadError && (
+          <p className="text-[13.5px] text-muted">Aún no hay más eventos disponibles.</p>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-          {upcomingEvents.slice(0, 4).map((event) => (
+          {upcomingEvents.map((event) => (
             <EventCard key={event.id} event={event} />
           ))}
         </div>

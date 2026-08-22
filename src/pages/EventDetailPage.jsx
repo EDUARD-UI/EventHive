@@ -6,15 +6,49 @@ import { getEventById } from '../services/eventService.js';
 export default function EventDetailPage() {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    getEventById(id).then(setEvent);
+    let isMounted = true;
+    setLoading(true);
+    setError(null);
+
+    getEventById(id)
+      .then((data) => {
+        if (isMounted) setEvent(data);
+      })
+      .catch((err) => {
+        if (isMounted) setError(err.message);
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [id]);
 
-  if (!event) {
+  if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#0b0b0d] text-white">
         <p>Cargando evento...</p>
+      </div>
+    );
+  }
+
+  if (error || !event) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#0b0b0d] px-6 text-center text-white">
+        <p>{error || 'No encontramos este evento.'}</p>
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium text-white/80 transition hover:bg-white/10"
+        >
+          <FiArrowLeft />
+          Volver al inicio
+        </Link>
       </div>
     );
   }
