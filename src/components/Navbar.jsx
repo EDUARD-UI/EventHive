@@ -9,19 +9,13 @@ export default function Navbar() {
   return (
     <>
       <header className="flex items-center justify-between px-6 sm:px-10 py-4 border-b border-borderc bg-white relative z-20">
-        <div className="flex items-center gap-2 font-display font-bold text-xl">
-          <span
-            className="w-[22px] h-[22px] bg-accent relative inline-block"
-            style={{ clipPath: 'polygon(25% 3%, 75% 3%, 100% 50%, 75% 97%, 25% 97%, 0% 50%)' }}
-          >
-            <span
-              className="absolute inset-[3px] bg-brand"
-              style={{ clipPath: 'polygon(25% 3%, 75% 3%, 100% 50%, 75% 97%, 25% 97%, 0% 50%)' }}
-            />
-          </span>
-          event<span className="text-brand">hive</span>
-          <span className="text-[10px] font-bold text-brand bg-brand-light px-1.5 py-0.5 rounded ml-1">CTG</span>
-        </div>
+        <a href="/" className="flex items-center gap-2.5">
+          <img src="/logo.png" alt="EventHive" className="h-9 w-auto object-contain shrink-0" />
+          <div className="flex items-center gap-1 font-display font-bold text-xl text-ink">
+            Event<span className="text-brand">Hive</span>
+            <span className="text-[10px] font-bold text-brand bg-brand-light px-1.5 py-0.5 rounded ml-1">CTG</span>
+          </div>
+        </a>
 
         <nav className="hidden md:flex gap-7 text-[14.5px] font-medium">
           {NAV_LINKS.map((link) => (
