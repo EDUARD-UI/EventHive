@@ -4,11 +4,16 @@ import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import EventCard from '../components/EventCard.jsx';
 import { searchEvents } from '../services/eventService.js';
+import { MOCK_EVENTS } from '../constants/mockEvents.js';
+// NOTA: el filtro por categoría usa MOCK_EVENTS (datos estáticos) mientras
+// el backend no esté disponible. La búsqueda por título/fecha sigue usando
+// searchEvents() del backend.
 
 export default function BuscarEventosPage() {
   const [searchParams] = useSearchParams();
   const titulo = searchParams.get('titulo') || '';
   const fecha = searchParams.get('fecha') || '';
+  const categoria = searchParams.get('categoria') || '';
 
   const [events, setEvents] = useState([]);
   const [total, setTotal] = useState(0);
@@ -20,7 +25,21 @@ export default function BuscarEventosPage() {
     setLoading(true);
     setError(null);
 
-    searchEvents({ titulo, fecha })
+    const load = async () => {
+      if (categoria) {
+        // Datos estáticos mientras el backend no está disponible.
+        const filtered = MOCK_EVENTS.filter((event) => {
+          const matchesCategoria = event.category?.toLowerCase() === categoria.toLowerCase();
+          const matchesTitulo = !titulo || event.title?.toLowerCase().includes(titulo.toLowerCase());
+          return matchesCategoria && matchesTitulo;
+        });
+        return { events: filtered, total: filtered.length };
+      }
+
+      return searchEvents({ titulo, fecha });
+    };
+
+    load()
       .then(({ events: results, total: totalResults }) => {
         if (!isMounted) return;
         setEvents(results);
@@ -36,23 +55,30 @@ export default function BuscarEventosPage() {
     return () => {
       isMounted = false;
     };
-  }, [titulo, fecha]);
+  }, [titulo, fecha, categoria]);
 
-  const hasFilters = Boolean(titulo || fecha);
+  const hasFilters = Boolean(titulo || fecha || categoria);
 
   return (
     <div className="w-full min-h-screen bg-white text-slate-900">
       <Navbar />
 
       <section className="w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
-        <Link to="/" className="text-[13.5px] font-semibold text-brand">← Volver al inicio</Link>
+        <Link
+          to={categoria ? '/categorias' : '/'}
+          className="text-[13.5px] font-semibold text-brand"
+        >
+          ← Volver {categoria ? 'a categorías' : 'al inicio'}
+        </Link>
 
         <div className="mt-3 mb-6">
-          <h1 className="text-xl sm:text-2xl font-display">Resultados de búsqueda</h1>
+          <h1 className="text-xl sm:text-2xl font-display">
+            {categoria || 'Resultados de búsqueda'}
+          </h1>
           <p className="text-[13.5px] text-muted mt-1">
             {hasFilters ? (
               <>
-                {titulo && `“${titulo}” `}
+                {!categoria && titulo && `“${titulo}” `}
                 {fecha && `· ${fecha} `}
                 {!loading && !error && `· ${total} evento${total === 1 ? '' : 's'} encontrado${total === 1 ? '' : 's'}`}
               </>

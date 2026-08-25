@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home.jsx';
 import EventDetailPage from '../pages/EventDetailPage.jsx';
 import BuscarEventosPage from '../pages/BuscarEventosPage.jsx';
+import CategoriasPage from '../pages/CategoriasPage.jsx';
 import AdminPanel from '../pages/AdminPanel.jsx';
 import ModeradorPanel from '../pages/ModeradorPanel.jsx';
 import InicioSesion from '../pages/InicioSesion.jsx';
@@ -16,6 +17,7 @@ export default function AppRouter() {
         <Route path="/" element={<Home />} />
         <Route path="/eventos/:id" element={<EventDetailPage />} />
         <Route path="/buscar" element={<BuscarEventosPage />} />
+        <Route path="/categorias" element={<CategoriasPage />} />
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/moderador" element={<ModeradorPanel />} />
         <Route path="/iniciosesion" element={<InicioSesion />} />

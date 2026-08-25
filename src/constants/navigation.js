@@ -1,6 +1,6 @@
 export const NAV_LINKS = [
-  { label: 'Explorar', href: '#' },
-  { label: 'Categorías', href: '#' },
+  { label: 'Explorar', href: '/buscar' },
+  { label: 'Categorías', href: '/categorias' },
   { label: 'Organizadores', href: '#' },
   { label: 'Ayuda', href: '#' },
 ];
