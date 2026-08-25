@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiSearch, FiCalendar } from 'react-icons/fi';
+import { FiCalendar, FiMapPin, FiSearch } from 'react-icons/fi';
 
 export default function SearchCard() {
   const navigate = useNavigate();
@@ -20,11 +20,11 @@ export default function SearchCard() {
   return (
     <form
       onSubmit={handleSearch}
-      className="relative z-[5] w-full bg-white rounded-2xl shadow-lg p-2.5 flex flex-col sm:flex-row gap-1.5 mt-2 mx-auto"
+      className="relative z-[5] mx-auto mt-2 flex w-full flex-col gap-1.5 rounded-2xl bg-white p-2.5 shadow-lg sm:flex-row"
     >
-      <label className="flex-1 flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg sm:border-r border-b sm:border-b-0 border-borderc cursor-text">
+      <label className="min-w-0 flex-1 flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg sm:border-r border-b sm:border-b-0 border-borderc cursor-text">
         <FiSearch className="text-brand shrink-0" />
-        <div className="flex-1 text-left">
+        <div className="min-w-0 flex-1 text-left">
           <div className="text-[10.5px] uppercase tracking-wide font-semibold text-muted">Buscar</div>
           <input
             type="text"
@@ -36,9 +36,22 @@ export default function SearchCard() {
         </div>
       </label>
 
-      <label className="flex-1 flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg cursor-text">
+      <label className="min-w-0 flex-1 flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg sm:border-r border-b sm:border-b-0 border-borderc cursor-text">
+        <FiMapPin className="text-red-500 shrink-0" />
+        <div className="min-w-0 flex-1 text-left">
+          <div className="text-[10.5px] uppercase tracking-wide font-semibold text-muted">Dónde</div>
+          <input
+            type="text"
+            defaultValue="Centro Histórico"
+            aria-label="Ubicación"
+            className="w-full bg-transparent text-sm font-semibold text-ink outline-none"
+          />
+        </div>
+      </label>
+
+      <label className="min-w-0 flex-1 flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg cursor-text">
         <FiCalendar className="text-brand shrink-0" />
-        <div className="flex-1 text-left">
+        <div className="min-w-0 flex-1 text-left">
           <div className="text-[10.5px] uppercase tracking-wide font-semibold text-muted">Cuándo</div>
           <input
             type="date"
