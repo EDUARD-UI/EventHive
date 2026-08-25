@@ -5,8 +5,6 @@ import BuscarEventosPage from '../pages/BuscarEventosPage.jsx';
 import AdminPanel from '../pages/Adminisstrador/AdminPanel.jsx';
 import ModeradorPanel from '../pages/Moderador/ModeradorPanel.jsx';
 import OrganizadorIndex from '../pages/Organizador/organizadorIndex.jsx';
-import AdminPanel from '../pages/AdminPanel.jsx';
-import ModeradorPanel from '../pages/ModeradorPanel.jsx';
 import InicioSesion from '../pages/InicioSesion.jsx';
 import Registro from '../pages/Registro.jsx';
 import PerfilUsuario from '../pages/PerfilUsuario.jsx';
