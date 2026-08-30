@@ -8,8 +8,8 @@ import {
   FiEdit2,
   FiMail,
 } from 'react-icons/fi';
-import Navbar from '../components/Navbar.jsx';
-import Footer from '../components/Footer.jsx';
+import Navbar from '../components/usersComponets/Navbar.jsx';
+import Footer from '../components/usersComponets/Footer.jsx';
 
 const TABS = [
   { id: 'guardados', label: 'Guardados' },
@@ -193,11 +193,10 @@ export default function PerfilCliente() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
-                      active
-                        ? 'bg-brand text-white shadow-sm'
-                        : 'text-muted hover:text-brand hover:bg-brand-light'
-                    }`}
+                    className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors ${active
+                      ? 'bg-brand text-white shadow-sm'
+                      : 'text-muted hover:text-brand hover:bg-brand-light'
+                      }`}
                   >
                     {Icon && <Icon size={14} />}
                     {tab.label}

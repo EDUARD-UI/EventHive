@@ -1,10 +1,10 @@
 import { FiMenu } from "react-icons/fi";
-import { NAV_LINKS } from "../constants/navigation.js";
-import MobileDrawer from "./MobileDrawer.jsx";
-import HelpChat from "./HelpChat.jsx";
-import { useDisclosure } from "../hooks/useDisclosure.js";
-import InicioSesion from "../pages/InicioSesion.jsx";
-import Registro from "../pages/Registro.jsx";
+import { NAV_LINKS } from "../../constants/navigation.js";
+import MobileDrawer from "../MobileDrawer.jsx";
+import HelpChat from "../HelpChat.jsx";
+import { useDisclosure } from "../../hooks/useDisclosure.js";
+import InicioSesion from "../../pages/InicioSesion.jsx";
+import Registro from "../../pages/Registro.jsx";
 import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {

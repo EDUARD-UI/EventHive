@@ -11,8 +11,8 @@ import {
   FiGrid,
   FiMusic,
 } from 'react-icons/fi';
-import Navbar from '../components/Navbar.jsx';
-import Footer from '../components/Footer.jsx';
+import Navbar from '../components/usersComponets/Navbar.jsx';
+import Footer from '../components/usersComponets/Footer.jsx';
 import { MOCK_EVENTS } from '../constants/mockEvents.js';
 // NOTA: mientras el backend no esté disponible, esta vista usa MOCK_EVENTS
 // (datos estáticos en src/constants/mockEvents.js). Cuando el backend esté
