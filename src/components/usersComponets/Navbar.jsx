@@ -6,6 +6,7 @@ import { useDisclosure } from "../../hooks/useDisclosure.js";
 import InicioSesion from "../../pages/InicioSesion.jsx";
 import Registro from "../../pages/Registro.jsx";
 import { useNavigate } from 'react-router-dom';
+import logoEventhive from "../../assets/logo-eventhive.jpg";
 
 export default function Navbar() {
   const { isOpen, open, close } = useDisclosure(false);
@@ -16,7 +17,7 @@ export default function Navbar() {
       <header className="flex items-center justify-between px-6 sm:px-10 py-4 border-b border-borderc bg-white relative z-20">
         <a href="/" className="flex items-center gap-2.5">
           <img
-            src="/logo.png"
+            src={logoEventhive}
             alt="EventHive"
             className="h-9 w-auto object-contain shrink-0"
           />
